@@ -157,6 +157,22 @@ class ArticleController extends Controller
         return redirect()->route('home');
     }
     
+    public function submit(Request $request)
+    {
+        // Валидация входящих данных
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        $title = $request->input('title');
+        $content = $request->input('content');
+
+        // Форматируем сообщение для отправки
+        $article = "Заголовок: $title\nСодержание: $content";
+
+        return redirect()->route('articles.index')->with('success', 'Статья успешно отправлена на рассмотрение.');
+    }
 
  
     

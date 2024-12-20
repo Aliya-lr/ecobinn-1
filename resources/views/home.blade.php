@@ -41,6 +41,52 @@
         </div>
     </section>
 
+      <!-- Форма для отправки статьи -->
+      <section class="submit-article">
+        <h2>Напишите свою статью</h2>
+        <form action="{{ route('articles.submit') }}" method="POST">
+            @csrf
+            <label for="title">Заголовок:</label><br>
+            <input type="text" id="title" name="title" required><br><br>
+
+            <label for="content">Содержание:</label><br>
+            <textarea id="content" name="content" rows="10" required></textarea><br><br>
+
+            <button type="submit">Отправить</button>
+        </form>
+    </section>
+
+    <!-- Отображение статей -->
+    <section class="latest-articles">
+        <h2>Последние статьи</h2>
+        <?php
+        // Обработка отправки статьи
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $title = htmlspecialchars($_POST['title']);
+            $content = htmlspecialchars($_POST['content']);
+
+            // Форматируем статью для записи в файл
+            $article = "Заголовок: $title\nСодержание: $content\n\n";
+
+            // Сохраняем статью в файл
+            file_put_contents('articles.txt', $article, FILE_APPEND | LOCK_EX);
+
+            header("Location: " . $_SERVER['PHP_SELF']);
+            exit();
+        }
+
+        // Чтение статей из файла
+        $articles = file_exists('articles.txt') ? file_get_contents('articles.txt') : "Нет статей на рассмотрении.";
+        ?>
+
+        <?php if ($articles): ?>
+            <pre><?php echo nl2br(htmlspecialchars($articles)); ?></pre>
+        <?php else: ?>
+            <p>Нет статей на рассмотрении.</p>
+        <?php endif; ?>
+    </section>
+
+
     <section class="impact">
         <h2 class="section-title">Мусор оказывает значительное влияние на окружающую среду и здоровье человека</h2>
         <div class="cards-row">

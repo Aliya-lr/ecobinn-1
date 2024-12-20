@@ -26,7 +26,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-
+Route::post('/articles/submit', [ArticleController::class, 'submit'])->name('articles.submit');
 Route::get('/', function () {
     return redirect('/home');
 });
@@ -39,6 +39,7 @@ Route::post('/articles/{article}/comments', [CommentController::class, 'store'])
 Route::get('/map', [MapController::class, 'index'])->name('map');
 
 
+
 // Маршруты для редактирования комментариев
 Route::middleware(['auth'])->group(function () {
     // Маршрут для редактирования комментария
@@ -46,6 +47,8 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::put('/articles/{article}/comments/{comment}', [CommentController::class, 'update'])->name('comments.update')->middleware('auth');
-Route::get('/articles', [ArticleController::class, 'index']);
+Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
 Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+
